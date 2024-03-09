@@ -77,15 +77,21 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** class doesn't exist **")
 
+    def bring_classes(self, class_type=None):
+        objects_list = []
+        allObjects = storage.all().values()
+        for object in allObjects:
+            if class_type == None or class_type == object.__class__.__name__:
+                objects_list.append(object.__str__())
+        print(objects_list)
+
     def do_all(self, arg):
-        if arg not in self.__foundClasses:
+        if arg == "":
+            self.bring_classes()
+        elif arg not in self.__foundClasses:
             print("** class doesn't exist **")
         else:
-            objects_list = []
-            allObjects = storage.all().values()
-            for object in allObjects:
-                objects_list.append(object.__str__())
-            print(objects_list)
+           self.bring_classes(arg)
 
     def do_update(self, arg):
         args = arg.split()
