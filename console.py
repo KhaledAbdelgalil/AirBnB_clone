@@ -6,13 +6,20 @@ which serves as the entry point of the Airbnb Project.
 
 import cmd
 from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.review import Review
+from models.amenity import Amenity
+from models.place import Place
+from models.city import City
 from models import storage
 from json import loads
 
 
 class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb)"
-    __foundClasses = {"BaseModel": BaseModel}
+    __foundClasses = {"BaseModel": BaseModel, "User": User, "State":State,
+                      "City": City, "Amenity":Amenity, "Place":Place, "Review": Review}
 
     def do_quit(self, arg):
         return True
