@@ -14,12 +14,39 @@ from models.place import Place
 from models.city import City
 from models import storage
 from json import loads
+import re
 
 
 class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb)"
     __foundClasses = {"BaseModel": BaseModel, "User": User, "State":State,
                       "City": City, "Amenity":Amenity, "Place":Place, "Review": Review}
+   
+    def default(self, line):
+        args = re.findall("(.*)\.(.*)\((.*)\)", line)
+        if args and len(args[0]) >= 2:
+            foundFunctions =  {
+                "all": self.do_all,
+                "show": self.do_show,
+                "destroy": self.do_destroy,
+                "count": self.do_count,
+                "update": self.do_update
+            }
+            class_name = args[0][0]
+            method_name = args[0][1]
+            rest_args = ""
+            if len(args[0]) > 2:
+                rest_args = args[0][2].split(',')
+            if method_name in foundFunctions.keys():
+                arg = str(class_name)
+                if rest_args != "":
+                    for element in rest_args:
+                        arg = arg + " " + str(element)
+                arg = arg.rstrip(' ')
+                return foundFunctions[method_name](arg)
+        
+        print("*** Unknown syntax: {}".format(line))
+        return False
 
     def do_quit(self, arg):
         return True
@@ -124,6 +151,9 @@ class HBNBCommand(cmd.Cmd):
                         print("** no instance found **")
             else:
                 print("** class doesn't exist **")
+    
+    def do_count(self, arg):
+        pass
 
 
 if __name__ == "__main__":
