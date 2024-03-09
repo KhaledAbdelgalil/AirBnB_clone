@@ -105,7 +105,7 @@ class HBNBCommand(cmd.Cmd):
                         elif len(args) < 4:
                             print("** value missing **")
                         else:
-                            obj.__dict__[args[2]] = loads(args[3])
+                            obj.__dict__[args[2]] = loads(args[3].replace("'", '"'))
                             obj.save()
                     else:
                         print("** no instance found **")
