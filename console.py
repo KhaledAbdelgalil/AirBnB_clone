@@ -36,7 +36,19 @@ class HBNBCommand(cmd.Cmd):
             method_name = args[0][1]
             rest_args = ""
             if len(args[0]) > 2:
-                rest_args = args[0][2].split(',')
+                if method_name == "update" and args[0][2] != "" and args[0][2][-1] == '}':
+                    id_dict_list = args[0][2].split(',', 1)
+                    updated_id , updated_dict = id_dict_list
+                    updated_dict = loads(updated_dict.replace("'",'"'))
+                    for k, v in updated_dict.items():
+                        if type(v) == str:
+                            v = f'"{v}"'
+                        arg = str(class_name) + " " + str(updated_id) + " " + str(k) + " " + str(v)
+                        if self.do_update(arg) == False:
+                            break
+                    return
+                else:
+                    rest_args = args[0][2].split(',')
             if method_name in foundFunctions.keys():
                 arg = str(class_name)
                 if rest_args != "":
@@ -131,10 +143,12 @@ class HBNBCommand(cmd.Cmd):
         args = arg.split()
         if len(args) < 1:
             print("** class name missing **")
+            return False
         else:
             if args[0] in self.__foundClasses:
                 if len(args) < 2:
                     print("** instance id missing **")
+                    return False
                 else:
                     allObjects = storage.all()
                     object_key = "{}.{}".format(args[0], args[1])
@@ -142,15 +156,19 @@ class HBNBCommand(cmd.Cmd):
                         obj = allObjects[object_key]
                         if len(args) < 3:
                             print("** attribute name missing **")
+                            return False
                         elif len(args) < 4:
                             print("** value missing **")
+                            return False
                         else:
                             obj.__dict__[args[2]] = loads(args[3].replace("'", '"'))
                             obj.save()
                     else:
                         print("** no instance found **")
+                        return False
             else:
                 print("** class doesn't exist **")
+                return False
     
     def do_count(self, arg):
         count = 0
