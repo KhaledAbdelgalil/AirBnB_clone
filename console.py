@@ -153,7 +153,12 @@ class HBNBCommand(cmd.Cmd):
                 print("** class doesn't exist **")
     
     def do_count(self, arg):
-        pass
+        count = 0
+        allObjects = storage.all().values()
+        for object in allObjects:
+            if arg == object.__class__.__name__:
+                count = count + 1
+        print(count)
 
 
 if __name__ == "__main__":
