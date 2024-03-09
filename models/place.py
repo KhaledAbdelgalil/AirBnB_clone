@@ -2,8 +2,10 @@
 """Place Module."""
 from models.base_model import BaseModel
 
+
 class Place(BaseModel):
     """A class representing a place to stay"""
+
     city_id = ""
     user_id = ""
     name = ""
