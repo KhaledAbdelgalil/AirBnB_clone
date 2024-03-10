@@ -1,165 +1,195 @@
 #!/usr/bin/python3
+"""Defines unittests for models/user.py.
 
-from models.user import User
+Unittest classes:
+    TestUser_instantiation
+    TestUser_save
+    TestUser_to_dict
+"""
+import os
 import models
 import unittest
 from datetime import datetime
 from time import sleep
-import os
+from models.user import User
 
-class TestUser(unittest.TestCase):
-    def test_type(self):
-        self.assertEqual(type(User()), User)
 
-    def test_Storage(self):
+class TestUser_instantiation(unittest.TestCase):
+    """Unittests for testing instantiation of the User class."""
+
+    def test_no_args_instantiates(self):
+        self.assertEqual(User, type(User()))
+
+    def test_new_instance_stored_in_objects(self):
         self.assertIn(User(), models.storage.all().values())
-    
-    def test_type_id(self):
-        self.assertEqual(type(User().id), str)
-    
-    def test_type_created_at(self):
-        self.assertEqual(type(User().created_at), datetime)
 
-    def test_type_updated_at(self):
-        self.assertEqual(type(User().updated_at), datetime)
-    
-    def test_id_unique(self):
-        obj1 = User()
-        obj2 = User()
-        self.assertNotEqual(obj1.id, obj2.id)
-    
-    def test_different_created_at(self):
-        obj1 = User()
-        sleep(0.1)
-        obj2 = User()
-        self.assertLess(obj1.created_at, obj2.created_at)
-    
-    def test_different_updated_at(self):
-        obj1 = User()
-        sleep(0.1)
-        obj2 = User()
-        self.assertLess(obj1.updated_at, obj2.updated_at)
-    
-    def tst_Str(self):
+    def test_id_is_public_str(self):
+        self.assertEqual(str, type(User().id))
+
+    def test_created_at_is_public_datetime(self):
+        self.assertEqual(datetime, type(User().created_at))
+
+    def test_updated_at_is_public_datetime(self):
+        self.assertEqual(datetime, type(User().updated_at))
+
+    def test_email_is_public_str(self):
+        self.assertEqual(str, type(User.email))
+
+    def test_password_is_public_str(self):
+        self.assertEqual(str, type(User.password))
+
+    def test_first_name_is_public_str(self):
+        self.assertEqual(str, type(User.first_name))
+
+    def test_last_name_is_public_str(self):
+        self.assertEqual(str, type(User.last_name))
+
+    def test_two_users_unique_ids(self):
+        us1 = User()
+        us2 = User()
+        self.assertNotEqual(us1.id, us2.id)
+
+    def test_two_users_different_created_at(self):
+        us1 = User()
+        sleep(0.05)
+        us2 = User()
+        self.assertLess(us1.created_at, us2.created_at)
+
+    def test_two_users_different_updated_at(self):
+        us1 = User()
+        sleep(0.05)
+        us2 = User()
+        self.assertLess(us1.updated_at, us2.updated_at)
+
+    def test_str_representation(self):
         dt = datetime.today()
         dt_repr = repr(dt)
-        obj1 = User()
-        obj1.id = "123456"
-        obj1.created_at = obj1.updated_at = dt
-        obj1.email = "khaled@gmail.com"
-        obj1Str = obj1.__str__()
-        self.assertIn("[User] (123456)", obj1Str)
-        self.assertIn("'id': '123456'", obj1Str)
-        self.assertIn("'created_at': " + dt_repr, obj1Str)
-        self.assertIn("'updated_at': " + dt_repr, obj1Str)
-        self.assertIn("'email': khaled@gmail.com", obj1Str)
-        self.assertIn("last_name:", obj1Str)
-    
+        us = User()
+        us.id = "123456"
+        us.created_at = us.updated_at = dt
+        usstr = us.__str__()
+        self.assertIn("[User] (123456)", usstr)
+        self.assertIn("'id': '123456'", usstr)
+        self.assertIn("'created_at': " + dt_repr, usstr)
+        self.assertIn("'updated_at': " + dt_repr, usstr)
+
     def test_args_unused(self):
-        obj = User(None)
-        self.assertNotIn(None, obj.__dict__.values())
+        us = User(None)
+        self.assertNotIn(None, us.__dict__.values())
 
-    def test_construction_with_kwargs(self):
+    def test_instantiation_with_kwargs(self):
         dt = datetime.today()
         dt_iso = dt.isoformat()
-        obj = User(id="345", created_at=dt_iso, updated_at=dt_iso)
-        self.assertEqual(obj.id, "345")
-        self.assertEqual(obj.created_at, dt)
-        self.assertEqual(obj.updated_at, dt)
+        us = User(id="345", created_at=dt_iso, updated_at=dt_iso)
+        self.assertEqual(us.id, "345")
+        self.assertEqual(us.created_at, dt)
+        self.assertEqual(us.updated_at, dt)
 
-    def test_construction_with_args_and_kwargs(self):
-        dt = datetime.today()
-        dt_iso = dt.isoformat()
-        obj = User("12", id="345", created_at=dt_iso, updated_at=dt_iso)
-        self.assertEqual(obj.id, "345")
-        self.assertEqual(obj.created_at, dt)
-        self.assertEqual(obj.updated_at, dt)
-    
-    def test_type_to_dict(self):
-        obj = User()
-        self.assertTrue(dict, type(obj.to_dict()))
-
-    def test_to_dict_contains_correct_keys(self):
-        obj = User()
-        self.assertIn("id", obj.to_dict())
-        self.assertIn("created_at", obj.to_dict())
-        self.assertIn("updated_at", obj.to_dict())
-        self.assertIn("__class__", obj.to_dict())
-
-    def test_to_dict_contains_added_attributes(self):
-        obj = User()
-        obj.name = "Holberton"
-        obj.my_number = 98
-        self.assertIn("name", obj.to_dict())
-        self.assertIn("my_number", obj.to_dict())
-
-    def test_type_to_dict_created_updated_attributes(self):
-        obj = User()
-        obj_dict = obj.to_dict()
-        self.assertEqual(str, type(obj_dict["created_at"]))
-        self.assertEqual(str, type(obj_dict["updated_at"]))
-
-    def test_to_dict_output(self):
-        dt = datetime.today()
-        obj = User()
-        obj.id = "123456"
-        obj.created_at = obj.updated_at = dt
-        tdict = {
-            'id': '123456',
-            '__class__': 'User',
-            'created_at': dt.isoformat(),
-            'updated_at': dt.isoformat()
-        }
-        self.assertDictEqual(obj.to_dict(), tdict)
-
-    def test_to_dict_dunder_dict(self):
-        obj = User()
-        self.assertNotEqual(obj.to_dict(), obj.__dict__)
-
-    def test_to_dict_with_arg(self):
-        bm = User()
+    def test_instantiation_with_None_kwargs(self):
         with self.assertRaises(TypeError):
-            bm.to_dict(None)
+            User(id=None, created_at=None, updated_at=None)
 
-class TestUserSave(unittest.TestCase):
-    """Unittests for testing save method of the BaseModel class."""
+
+class TestUser_save(unittest.TestCase):
+    """Unittests for testing save method of the  class."""
 
     @classmethod
     def setUp(self):
         try:
-            os.rename("file.json", "testTmp")
+            os.rename("file.json", "tmp")
         except IOError:
             pass
 
-    @classmethod
     def tearDown(self):
         try:
             os.remove("file.json")
         except IOError:
             pass
         try:
-            os.rename("testTmp", "file.json")
+            os.rename("tmp", "file.json")
         except IOError:
             pass
 
     def test_one_save(self):
-        obj = User()
-        sleep(0.1)
-        initial_updated_at = obj.updated_at
-        obj.save()
-        self.assertLess(initial_updated_at, obj.updated_at)
+        us = User()
+        sleep(0.05)
+        first_updated_at = us.updated_at
+        us.save()
+        self.assertLess(first_updated_at, us.updated_at)
+
+    def test_two_saves(self):
+        us = User()
+        sleep(0.05)
+        first_updated_at = us.updated_at
+        us.save()
+        second_updated_at = us.updated_at
+        self.assertLess(first_updated_at, second_updated_at)
+        sleep(0.05)
+        us.save()
+        self.assertLess(second_updated_at, us.updated_at)
 
     def test_save_with_arg(self):
-        obj = User()
+        us = User()
         with self.assertRaises(TypeError):
-            obj.save(None)
+            us.save(None)
 
     def test_save_updates_file(self):
-        obj = User()
-        obj.save()
-        objId = "User." + obj.id
+        us = User()
+        us.save()
+        usid = "User." + us.id
         with open("file.json", "r") as f:
-            self.assertIn(objId, f.read())
+            self.assertIn(usid, f.read())
+
+
+class TestUser_to_dict(unittest.TestCase):
+    """Unittests for testing to_dict method of the User class."""
+
+    def test_to_dict_type(self):
+        self.assertTrue(dict, type(User().to_dict()))
+
+    def test_to_dict_contains_correct_keys(self):
+        us = User()
+        self.assertIn("id", us.to_dict())
+        self.assertIn("created_at", us.to_dict())
+        self.assertIn("updated_at", us.to_dict())
+        self.assertIn("__class__", us.to_dict())
+
+    def test_to_dict_contains_added_attributes(self):
+        us = User()
+        us.middle_name = "Holberton"
+        us.my_number = 98
+        self.assertEqual("Holberton", us.middle_name)
+        self.assertIn("my_number", us.to_dict())
+
+    def test_to_dict_datetime_attributes_are_strs(self):
+        us = User()
+        us_dict = us.to_dict()
+        self.assertEqual(str, type(us_dict["id"]))
+        self.assertEqual(str, type(us_dict["created_at"]))
+        self.assertEqual(str, type(us_dict["updated_at"]))
+
+    def test_to_dict_output(self):
+        dt = datetime.today()
+        us = User()
+        us.id = "123456"
+        us.created_at = us.updated_at = dt
+        tdict = {
+            'id': '123456',
+            '__class__': 'User',
+            'created_at': dt.isoformat(),
+            'updated_at': dt.isoformat(),
+        }
+        self.assertDictEqual(us.to_dict(), tdict)
+
+    def test_contrast_to_dict_dunder_dict(self):
+        us = User()
+        self.assertNotEqual(us.to_dict(), us.__dict__)
+
+    def test_to_dict_with_arg(self):
+        us = User()
+        with self.assertRaises(TypeError):
+            us.to_dict(None)
+
 
 if __name__ == "__main__":
     unittest.main()
