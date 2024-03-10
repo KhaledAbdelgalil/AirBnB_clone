@@ -7,22 +7,23 @@ from datetime import datetime
 from time import sleep
 import os
 
+
 class TestPlace(unittest.TestCase):
     def test_type(self):
         self.assertEqual(type(Place()), Place)
 
     def test_Storage(self):
         self.assertIn(Place(), models.storage.all().values())
-    
+
     def test_type_id(self):
         self.assertEqual(type(Place().id), str)
-    
+
     def test_type_created_at(self):
         self.assertEqual(type(Place().created_at), datetime)
 
     def test_type_updated_at(self):
         self.assertEqual(type(Place().updated_at), datetime)
-    
+
     def test_basic_attributes(self):
         obj = Place()
         self.assertIn("id", dir(obj))
@@ -98,24 +99,23 @@ class TestPlace(unittest.TestCase):
         self.assertIn("amenity_ids", dir(pl))
         self.assertNotIn("amenity_ids", pl.__dict__)
 
-    
     def test_id_unique(self):
         obj1 = Place()
         obj2 = Place()
         self.assertNotEqual(obj1.id, obj2.id)
-    
+
     def test_different_created_at(self):
         obj1 = Place()
         sleep(0.1)
         obj2 = Place()
         self.assertLess(obj1.created_at, obj2.created_at)
-    
+
     def test_different_updated_at(self):
         obj1 = Place()
         sleep(0.1)
         obj2 = Place()
         self.assertLess(obj1.updated_at, obj2.updated_at)
-    
+
     def test_Str(self):
         dt = datetime.today()
         dt_repr = repr(dt)
@@ -152,7 +152,6 @@ class TestPlace(unittest.TestCase):
         self.assertIn("'longitude': 0.0", obj1Str)
         self.assertIn("'amenity_ids': [3, 5]", obj1Str)
 
-    
     def test_args_unused(self):
         obj = Place(None)
         self.assertNotIn(None, obj.__dict__.values())
@@ -172,7 +171,7 @@ class TestPlace(unittest.TestCase):
         self.assertEqual(obj.id, "345")
         self.assertEqual(obj.created_at, dt)
         self.assertEqual(obj.updated_at, dt)
-    
+
     def test_type_to_dict(self):
         obj = Place()
         self.assertTrue(dict, type(obj.to_dict()))
@@ -203,10 +202,10 @@ class TestPlace(unittest.TestCase):
         obj.id = "123456"
         obj.created_at = obj.updated_at = dt
         tdict = {
-            'id': '123456',
-            '__class__': 'Place',
-            'created_at': dt.isoformat(),
-            'updated_at': dt.isoformat()
+            "id": "123456",
+            "__class__": "Place",
+            "created_at": dt.isoformat(),
+            "updated_at": dt.isoformat(),
         }
         self.assertDictEqual(obj.to_dict(), tdict)
 
@@ -218,6 +217,7 @@ class TestPlace(unittest.TestCase):
         bm = Place()
         with self.assertRaises(TypeError):
             bm.to_dict(None)
+
 
 class TestAmenitySave(unittest.TestCase):
     """Unittests for testing save method of the place class."""
@@ -258,6 +258,7 @@ class TestAmenitySave(unittest.TestCase):
         objId = "Place." + obj.id
         with open("file.json", "r") as f:
             self.assertIn(objId, f.read())
+
 
 if __name__ == "__main__":
     unittest.main()

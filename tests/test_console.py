@@ -88,9 +88,7 @@ class TestHBNBCommand(unittest.TestCase):
             self.assertEqual(h, output.getvalue().strip())
 
     def test_help_count(self):
-        h = (
-            "counts the number of instances of a class or all classes"
-        )
+        h = "counts the number of instances of a class or all classes"
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertFalse(HBNBCommand().onecmd("help count"))
             self.assertEqual(h, output.getvalue().strip())
@@ -1303,8 +1301,9 @@ and id"
     def test_count_invalid_class(self):
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertFalse(HBNBCommand().onecmd("AnyClass.count()"))
-            self.assertEqual("** class doesn't exist **",
-                             output.getvalue().strip())
+            self.assertEqual(
+                "** class doesn't exist **", output.getvalue().strip()
+            )
 
     def test_count_object(self):
         with patch("sys.stdout", new=StringIO()) as output:

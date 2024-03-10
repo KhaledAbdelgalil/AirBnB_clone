@@ -7,39 +7,40 @@ from datetime import datetime
 from time import sleep
 import os
 
+
 class TestBaseModel(unittest.TestCase):
     def test_type(self):
         self.assertEqual(type(BaseModel()), BaseModel)
 
     def test_baseModelStorage(self):
         self.assertIn(BaseModel(), models.storage.all().values())
-    
+
     def test_type_id(self):
         self.assertEqual(type(BaseModel().id), str)
-    
+
     def test_type_created_at(self):
         self.assertEqual(type(BaseModel().created_at), datetime)
 
     def test_type_updated_at(self):
         self.assertEqual(type(BaseModel().updated_at), datetime)
-    
+
     def test_id_unique(self):
         obj1 = BaseModel()
         obj2 = BaseModel()
         self.assertNotEqual(obj1.id, obj2.id)
-    
+
     def test_different_created_at(self):
         obj1 = BaseModel()
         sleep(0.1)
         obj2 = BaseModel()
         self.assertLess(obj1.created_at, obj2.created_at)
-    
+
     def test_different_updated_at(self):
         obj1 = BaseModel()
         sleep(0.1)
         obj2 = BaseModel()
         self.assertLess(obj1.updated_at, obj2.updated_at)
-    
+
     def test_baseModelStr(self):
         dt = datetime.today()
         dt_repr = repr(dt)
@@ -51,7 +52,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertIn("'id': '123456'", obj1Str)
         self.assertIn("'created_at': " + dt_repr, obj1Str)
         self.assertIn("'updated_at': " + dt_repr, obj1Str)
-    
+
     def test_args_unused(self):
         obj = BaseModel(None)
         self.assertNotIn(None, obj.__dict__.values())
@@ -71,7 +72,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(obj.id, "345")
         self.assertEqual(obj.created_at, dt)
         self.assertEqual(obj.updated_at, dt)
-    
+
     def test_type_to_dict(self):
         obj = BaseModel()
         self.assertTrue(dict, type(obj.to_dict()))
@@ -102,10 +103,10 @@ class TestBaseModel(unittest.TestCase):
         obj.id = "123456"
         obj.created_at = obj.updated_at = dt
         tdict = {
-            'id': '123456',
-            '__class__': 'BaseModel',
-            'created_at': dt.isoformat(),
-            'updated_at': dt.isoformat()
+            "id": "123456",
+            "__class__": "BaseModel",
+            "created_at": dt.isoformat(),
+            "updated_at": dt.isoformat(),
         }
         self.assertDictEqual(obj.to_dict(), tdict)
 
@@ -117,6 +118,7 @@ class TestBaseModel(unittest.TestCase):
         bm = BaseModel()
         with self.assertRaises(TypeError):
             bm.to_dict(None)
+
 
 class TestBaseModelSave(unittest.TestCase):
     """Unittests for testing save method of the BaseModel class."""
@@ -157,6 +159,7 @@ class TestBaseModelSave(unittest.TestCase):
         objId = "BaseModel." + obj.id
         with open("file.json", "r") as f:
             self.assertIn(objId, f.read())
+
 
 if __name__ == "__main__":
     unittest.main()

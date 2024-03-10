@@ -19,6 +19,7 @@ from models.amenity import Amenity
 from models.review import Review
 import models
 
+
 class TestFileStorageConstruction(unittest.TestCase):
     """Unittests for testing construction of the FileStorage class."""
 

@@ -7,16 +7,17 @@ from datetime import datetime
 from time import sleep
 import os
 
+
 class TestAmenity(unittest.TestCase):
     def test_type(self):
         self.assertEqual(type(City()), City)
 
     def test_Storage(self):
         self.assertIn(City(), models.storage.all().values())
-    
+
     def test_type_id(self):
         self.assertEqual(type(City().id), str)
-    
+
     def test_type_created_at(self):
         self.assertEqual(type(City().created_at), datetime)
 
@@ -28,24 +29,24 @@ class TestAmenity(unittest.TestCase):
 
     def test_type_name(self):
         self.assertEqual(type(City().name), str)
-    
+
     def test_id_unique(self):
         obj1 = City()
         obj2 = City()
         self.assertNotEqual(obj1.id, obj2.id)
-    
+
     def test_different_created_at(self):
         obj1 = City()
         sleep(0.1)
         obj2 = City()
         self.assertLess(obj1.created_at, obj2.created_at)
-    
+
     def test_different_updated_at(self):
         obj1 = City()
         sleep(0.1)
         obj2 = City()
         self.assertLess(obj1.updated_at, obj2.updated_at)
-    
+
     def test_Str(self):
         dt = datetime.today()
         dt_repr = repr(dt)
@@ -61,7 +62,7 @@ class TestAmenity(unittest.TestCase):
         self.assertIn("'updated_at': " + dt_repr, obj1Str)
         self.assertIn("'name': 'temp'", obj1Str)
         self.assertIn("'state_id': 2", obj1Str)
-    
+
     def test_args_unused(self):
         obj = City(None)
         self.assertNotIn(None, obj.__dict__.values())
@@ -81,7 +82,7 @@ class TestAmenity(unittest.TestCase):
         self.assertEqual(obj.id, "345")
         self.assertEqual(obj.created_at, dt)
         self.assertEqual(obj.updated_at, dt)
-    
+
     def test_type_to_dict(self):
         obj = City()
         self.assertTrue(dict, type(obj.to_dict()))
@@ -112,10 +113,10 @@ class TestAmenity(unittest.TestCase):
         obj.id = "123456"
         obj.created_at = obj.updated_at = dt
         tdict = {
-            'id': '123456',
-            '__class__': 'City',
-            'created_at': dt.isoformat(),
-            'updated_at': dt.isoformat()
+            "id": "123456",
+            "__class__": "City",
+            "created_at": dt.isoformat(),
+            "updated_at": dt.isoformat(),
         }
         self.assertDictEqual(obj.to_dict(), tdict)
 
@@ -127,6 +128,7 @@ class TestAmenity(unittest.TestCase):
         bm = City()
         with self.assertRaises(TypeError):
             bm.to_dict(None)
+
 
 class TestCitySave(unittest.TestCase):
     """Unittests for testing save method of the City class."""
@@ -167,6 +169,7 @@ class TestCitySave(unittest.TestCase):
         objId = "City." + obj.id
         with open("file.json", "r") as f:
             self.assertIn(objId, f.read())
+
 
 if __name__ == "__main__":
     unittest.main()

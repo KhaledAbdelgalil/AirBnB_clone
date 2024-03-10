@@ -7,22 +7,23 @@ from datetime import datetime
 from time import sleep
 import os
 
+
 class TestReview(unittest.TestCase):
     def test_type(self):
         self.assertEqual(type(Review()), Review)
 
     def test_Storage(self):
         self.assertIn(Review(), models.storage.all().values())
-    
+
     def test_type_id(self):
         self.assertEqual(type(Review().id), str)
-    
+
     def test_type_created_at(self):
         self.assertEqual(type(Review().created_at), datetime)
 
     def test_type_updated_at(self):
         self.assertEqual(type(Review().updated_at), datetime)
-    
+
     def test_place_id(self):
         rv = Review()
         self.assertEqual(str, type(Review.place_id))
@@ -49,24 +50,24 @@ class TestReview(unittest.TestCase):
         self.assertIn("updated_at", obj.__dict__)
         self.assertIn("created_at", dir(obj))
         self.assertIn("created_at", obj.__dict__)
-    
+
     def test_id_unique(self):
         obj1 = Review()
         obj2 = Review()
         self.assertNotEqual(obj1.id, obj2.id)
-    
+
     def test_different_created_at(self):
         obj1 = Review()
         sleep(0.1)
         obj2 = Review()
         self.assertLess(obj1.created_at, obj2.created_at)
-    
+
     def test_different_updated_at(self):
         obj1 = Review()
         sleep(0.1)
         obj2 = Review()
         self.assertLess(obj1.updated_at, obj2.updated_at)
-    
+
     def test_Str(self):
         dt = datetime.today()
         dt_repr = repr(dt)
@@ -74,8 +75,8 @@ class TestReview(unittest.TestCase):
         obj1.id = "123456"
         obj1.created_at = obj1.updated_at = dt
         obj1.text = "temp"
-        obj1.user_id = '2'
-        obj1.place_id = '3'
+        obj1.user_id = "2"
+        obj1.place_id = "3"
         obj1Str = obj1.__str__()
         self.assertIn("[Review] (123456)", obj1Str)
         self.assertIn("'id': '123456'", obj1Str)
@@ -84,7 +85,7 @@ class TestReview(unittest.TestCase):
         self.assertIn("'text': 'temp'", obj1Str)
         self.assertIn("'user_id': '2'", obj1Str)
         self.assertIn("'place_id': '3'", obj1Str)
-    
+
     def test_args_unused(self):
         obj = Review(None)
         self.assertNotIn(None, obj.__dict__.values())
@@ -104,7 +105,7 @@ class TestReview(unittest.TestCase):
         self.assertEqual(obj.id, "345")
         self.assertEqual(obj.created_at, dt)
         self.assertEqual(obj.updated_at, dt)
-    
+
     def test_type_to_dict(self):
         obj = Review()
         self.assertTrue(dict, type(obj.to_dict()))
@@ -135,10 +136,10 @@ class TestReview(unittest.TestCase):
         obj.id = "123456"
         obj.created_at = obj.updated_at = dt
         tdict = {
-            'id': '123456',
-            '__class__': 'Review',
-            'created_at': dt.isoformat(),
-            'updated_at': dt.isoformat()
+            "id": "123456",
+            "__class__": "Review",
+            "created_at": dt.isoformat(),
+            "updated_at": dt.isoformat(),
         }
         self.assertDictEqual(obj.to_dict(), tdict)
 
@@ -150,6 +151,7 @@ class TestReview(unittest.TestCase):
         bm = Review()
         with self.assertRaises(TypeError):
             bm.to_dict(None)
+
 
 class TestAmenitySave(unittest.TestCase):
     """Unittests for testing save method of the Review class."""
@@ -190,6 +192,7 @@ class TestAmenitySave(unittest.TestCase):
         objId = "Review." + obj.id
         with open("file.json", "r") as f:
             self.assertIn(objId, f.read())
+
 
 if __name__ == "__main__":
     unittest.main()
