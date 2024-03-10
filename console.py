@@ -18,7 +18,7 @@ import re
 
 
 class HBNBCommand(cmd.Cmd):
-    prompt = "(hbnb)"
+    prompt = "(hbnb) "
     __foundClasses = {"BaseModel": BaseModel, "User": User, "State":State,
                       "City": City, "Amenity":Amenity, "Place":Place, "Review": Review}
    
@@ -70,7 +70,7 @@ class HBNBCommand(cmd.Cmd):
         return
 
     def help_quit(self):
-        print("Quit command to exit the program\n")
+        print("Quit command to exit the program.\n")
 
     def help_EOF(self):
         print("EOF\n")
