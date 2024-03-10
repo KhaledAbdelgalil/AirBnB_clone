@@ -58,7 +58,7 @@ class HBNBCommand(cmd.Cmd):
                     updated_id, updated_dict = id_dict_list
                     updated_dict = loads(updated_dict.replace("'", '"'))
                     for k, v in updated_dict.items():
-                        if type(v) == str:
+                        if type(v) is str:
                             v = f'"{v}"'
                         arg = (
                             str(class_name)
