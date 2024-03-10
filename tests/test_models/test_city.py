@@ -22,6 +22,12 @@ class TestAmenity(unittest.TestCase):
 
     def test_type_updated_at(self):
         self.assertEqual(type(City().updated_at), datetime)
+
+    def test_type_state(self):
+        self.assertEqual(type(City().state_id), str)
+
+    def test_type_name(self):
+        self.assertEqual(type(City().name), str)
     
     def test_id_unique(self):
         obj1 = City()
@@ -40,19 +46,21 @@ class TestAmenity(unittest.TestCase):
         obj2 = City()
         self.assertLess(obj1.updated_at, obj2.updated_at)
     
-    def tst_Str(self):
+    def test_Str(self):
         dt = datetime.today()
         dt_repr = repr(dt)
         obj1 = City()
         obj1.id = "123456"
         obj1.created_at = obj1.updated_at = dt
         obj1.name = "temp"
+        obj1.state_id = 2
         obj1Str = obj1.__str__()
-        self.assertIn("[Amenity] (123456)", obj1Str)
+        self.assertIn("[City] (123456)", obj1Str)
         self.assertIn("'id': '123456'", obj1Str)
         self.assertIn("'created_at': " + dt_repr, obj1Str)
         self.assertIn("'updated_at': " + dt_repr, obj1Str)
-        self.assertIn("name: temp", obj1Str)
+        self.assertIn("'name': 'temp'", obj1Str)
+        self.assertIn("'state_id': 2", obj1Str)
     
     def test_args_unused(self):
         obj = City(None)

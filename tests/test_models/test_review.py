@@ -23,6 +23,33 @@ class TestReview(unittest.TestCase):
     def test_type_updated_at(self):
         self.assertEqual(type(Review().updated_at), datetime)
     
+    def test_place_id(self):
+        rv = Review()
+        self.assertEqual(str, type(Review.place_id))
+        self.assertIn("place_id", dir(rv))
+        self.assertNotIn("place_id", rv.__dict__)
+
+    def test_user_id(self):
+        rv = Review()
+        self.assertEqual(str, type(Review.user_id))
+        self.assertIn("user_id", dir(rv))
+        self.assertNotIn("user_id", rv.__dict__)
+
+    def test_text(self):
+        rv = Review()
+        self.assertEqual(str, type(Review.text))
+        self.assertIn("text", dir(rv))
+        self.assertNotIn("text", rv.__dict__)
+
+    def test_basic_attributes(self):
+        obj = Review()
+        self.assertIn("id", dir(obj))
+        self.assertIn("id", obj.__dict__)
+        self.assertIn("updated_at", dir(obj))
+        self.assertIn("updated_at", obj.__dict__)
+        self.assertIn("created_at", dir(obj))
+        self.assertIn("created_at", obj.__dict__)
+    
     def test_id_unique(self):
         obj1 = Review()
         obj2 = Review()
@@ -40,19 +67,23 @@ class TestReview(unittest.TestCase):
         obj2 = Review()
         self.assertLess(obj1.updated_at, obj2.updated_at)
     
-    def tst_Str(self):
+    def test_Str(self):
         dt = datetime.today()
         dt_repr = repr(dt)
         obj1 = Review()
         obj1.id = "123456"
         obj1.created_at = obj1.updated_at = dt
         obj1.text = "temp"
+        obj1.user_id = '2'
+        obj1.place_id = '3'
         obj1Str = obj1.__str__()
-        self.assertIn("[Amenity] (123456)", obj1Str)
+        self.assertIn("[Review] (123456)", obj1Str)
         self.assertIn("'id': '123456'", obj1Str)
         self.assertIn("'created_at': " + dt_repr, obj1Str)
         self.assertIn("'updated_at': " + dt_repr, obj1Str)
-        self.assertIn("text: temp", obj1Str)
+        self.assertIn("'text': 'temp'", obj1Str)
+        self.assertIn("'user_id': '2'", obj1Str)
+        self.assertIn("'place_id': '3'", obj1Str)
     
     def test_args_unused(self):
         obj = Review(None)

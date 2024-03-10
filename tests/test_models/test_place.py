@@ -23,6 +23,82 @@ class TestPlace(unittest.TestCase):
     def test_type_updated_at(self):
         self.assertEqual(type(Place().updated_at), datetime)
     
+    def test_basic_attributes(self):
+        obj = Place()
+        self.assertIn("id", dir(obj))
+        self.assertIn("id", obj.__dict__)
+        self.assertIn("updated_at", dir(obj))
+        self.assertIn("updated_at", obj.__dict__)
+        self.assertIn("created_at", dir(obj))
+        self.assertIn("created_at", obj.__dict__)
+
+    def test_city_id(self):
+        pl = Place()
+        self.assertEqual(str, type(Place.city_id))
+        self.assertIn("city_id", dir(pl))
+        self.assertNotIn("city_id", pl.__dict__)
+
+    def test_user_id(self):
+        pl = Place()
+        self.assertEqual(str, type(Place.user_id))
+        self.assertIn("user_id", dir(pl))
+        self.assertNotIn("user_id", pl.__dict__)
+
+    def test_name(self):
+        pl = Place()
+        self.assertEqual(str, type(Place.name))
+        self.assertIn("name", dir(pl))
+        self.assertNotIn("name", pl.__dict__)
+
+    def test_description(self):
+        pl = Place()
+        self.assertEqual(str, type(Place.description))
+        self.assertIn("description", dir(pl))
+        self.assertNotIn("desctiption", pl.__dict__)
+
+    def test_number_rooms(self):
+        pl = Place()
+        self.assertEqual(int, type(Place.number_rooms))
+        self.assertIn("number_rooms", dir(pl))
+        self.assertNotIn("number_rooms", pl.__dict__)
+
+    def test_number_bathrooms(self):
+        pl = Place()
+        self.assertEqual(int, type(Place.number_bathrooms))
+        self.assertIn("number_bathrooms", dir(pl))
+        self.assertNotIn("number_bathrooms", pl.__dict__)
+
+    def test_max_guest(self):
+        pl = Place()
+        self.assertEqual(int, type(Place.max_guest))
+        self.assertIn("max_guest", dir(pl))
+        self.assertNotIn("max_guest", pl.__dict__)
+
+    def test_price_by_night(self):
+        pl = Place()
+        self.assertEqual(int, type(Place.price_by_night))
+        self.assertIn("price_by_night", dir(pl))
+        self.assertNotIn("price_by_night", pl.__dict__)
+
+    def test_latitude(self):
+        pl = Place()
+        self.assertEqual(float, type(Place.latitude))
+        self.assertIn("latitude", dir(pl))
+        self.assertNotIn("latitude", pl.__dict__)
+
+    def test_longitude(self):
+        pl = Place()
+        self.assertEqual(float, type(Place.longitude))
+        self.assertIn("longitude", dir(pl))
+        self.assertNotIn("longitude", pl.__dict__)
+
+    def test_amenity_ids(self):
+        pl = Place()
+        self.assertEqual(list, type(Place.amenity_ids))
+        self.assertIn("amenity_ids", dir(pl))
+        self.assertNotIn("amenity_ids", pl.__dict__)
+
+    
     def test_id_unique(self):
         obj1 = Place()
         obj2 = Place()
@@ -40,19 +116,42 @@ class TestPlace(unittest.TestCase):
         obj2 = Place()
         self.assertLess(obj1.updated_at, obj2.updated_at)
     
-    def tst_Str(self):
+    def test_Str(self):
         dt = datetime.today()
         dt_repr = repr(dt)
         obj1 = Place()
         obj1.id = "123456"
         obj1.created_at = obj1.updated_at = dt
         obj1.description = "temp"
+        obj1.amenity_ids
+        obj1.city_id = 5
+        obj1.user_id = 2
+        obj1.name = "LondonWaterloo"
+        obj1.description = "center of london"
+        obj1.number_rooms = 5
+        obj1.number_bathrooms = 3
+        obj1.max_guest = 6
+        obj1.price_by_night = 100
+        obj1.latitude = 0.0
+        obj1.longitude = 0.0
+        obj1.amenity_ids = [3, 5]
         obj1Str = obj1.__str__()
-        self.assertIn("[Amenity] (123456)", obj1Str)
+        self.assertIn("[Place] (123456)", obj1Str)
         self.assertIn("'id': '123456'", obj1Str)
         self.assertIn("'created_at': " + dt_repr, obj1Str)
         self.assertIn("'updated_at': " + dt_repr, obj1Str)
-        self.assertIn("description: temp", obj1Str)
+        self.assertIn("'city_id': 5", obj1Str)
+        self.assertIn("'user_id': 2", obj1Str)
+        self.assertIn("'name': 'LondonWaterloo'", obj1Str)
+        self.assertIn("'description': 'center of london'", obj1Str)
+        self.assertIn("'number_rooms': 5", obj1Str)
+        self.assertIn("'number_bathrooms': 3", obj1Str)
+        self.assertIn("'max_guest': 6", obj1Str)
+        self.assertIn("'price_by_night': 100", obj1Str)
+        self.assertIn("'latitude': 0.0", obj1Str)
+        self.assertIn("'longitude': 0.0", obj1Str)
+        self.assertIn("'amenity_ids': [3, 5]", obj1Str)
+
     
     def test_args_unused(self):
         obj = Place(None)
@@ -121,7 +220,7 @@ class TestPlace(unittest.TestCase):
             bm.to_dict(None)
 
 class TestAmenitySave(unittest.TestCase):
-    """Unittests for testing save method of the Amenity class."""
+    """Unittests for testing save method of the place class."""
 
     @classmethod
     def setUp(self):

@@ -23,6 +23,21 @@ class TestStatee(unittest.TestCase):
     def test_type_updated_at(self):
         self.assertEqual(type(State().updated_at), datetime)
     
+    def test_name(self):
+        st = State()
+        self.assertEqual(str, type(State.name))
+        self.assertIn("name", dir(st))
+        self.assertNotIn("name", st.__dict__)
+
+    def test_basic_attributes(self):
+        obj = State()
+        self.assertIn("id", dir(obj))
+        self.assertIn("id", obj.__dict__)
+        self.assertIn("updated_at", dir(obj))
+        self.assertIn("updated_at", obj.__dict__)
+        self.assertIn("created_at", dir(obj))
+        self.assertIn("created_at", obj.__dict__)
+    
     def test_id_unique(self):
         obj1 = State()
         obj2 = State()
@@ -40,7 +55,7 @@ class TestStatee(unittest.TestCase):
         obj2 = State()
         self.assertLess(obj1.updated_at, obj2.updated_at)
     
-    def tst_Str(self):
+    def test_Str(self):
         dt = datetime.today()
         dt_repr = repr(dt)
         obj1 = State()
@@ -52,7 +67,7 @@ class TestStatee(unittest.TestCase):
         self.assertIn("'id': '123456'", obj1Str)
         self.assertIn("'created_at': " + dt_repr, obj1Str)
         self.assertIn("'updated_at': " + dt_repr, obj1Str)
-        self.assertIn("name: temp", obj1Str)
+        self.assertIn("'name': 'temp'", obj1Str)
     
     def test_args_unused(self):
         obj = State(None)
@@ -121,7 +136,7 @@ class TestStatee(unittest.TestCase):
             bm.to_dict(None)
 
 class TestAmenitySave(unittest.TestCase):
-    """Unittests for testing save method of the Review class."""
+    """Unittests for testing save method of the State class."""
 
     @classmethod
     def setUp(self):

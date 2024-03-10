@@ -18,10 +18,24 @@ from models.place import Place
 
 
 class FileStorage:
+    """Represent an abstracted storage engine.
+
+    Attributes:
+        __file_path (str): The name of the file to save objects to.
+        __objects (dict): A dictionary of instantiated objects.
+        __nameToClass(dict): name of class==>constructor of class.
+    """
     __file_path = "file.json"
     __objects = {}
-    __nameToClass = {"BaseModel": BaseModel, "User": User, "State":State,
-                      "City": City, "Amenity":Amenity, "Place":Place, "Review": Review}
+    __nameToClass = {
+        "BaseModel": BaseModel,
+        "User": User,
+        "State": State,
+        "City": City,
+        "Amenity": Amenity,
+        "Place": Place,
+        "Review": Review,
+    }
 
     def all(self):
         """Returns the dictionary __objects"""
@@ -33,6 +47,7 @@ class FileStorage:
         self.__objects[key] = obj
 
     def save(self):
+        """Serialize __objects to the JSON file __file_path."""
         try:
             saved_dic = {}
             for key, object in self.all().items():
@@ -44,13 +59,14 @@ class FileStorage:
             return
 
     def reload(self):
+        """Deserialize the JSON file __file_path to __objects, if it exists."""
         read_dic = {}
         try:
             with open(self.__file_path, "r") as read_file:
                 read_dic = json.load(read_file)
         except Exception:
             return
-        # key(class name.id) ==> object dict
+        """ key(class name.id) ==> object dict """
         for key, object_dic in read_dic.items():
             if object_dic["__class__"] in self.__nameToClass:
                 obj = self.__nameToClass[object_dic["__class__"]](**object_dic)

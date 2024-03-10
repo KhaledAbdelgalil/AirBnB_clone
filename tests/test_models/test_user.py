@@ -32,6 +32,15 @@ class TestUser_instantiation(unittest.TestCase):
     def test_updated_at_is_public_datetime(self):
         self.assertEqual(datetime, type(User().updated_at))
 
+    def test_basic_attributes(self):
+        obj = User()
+        self.assertIn("id", dir(obj))
+        self.assertIn("id", obj.__dict__)
+        self.assertIn("updated_at", dir(obj))
+        self.assertIn("updated_at", obj.__dict__)
+        self.assertIn("created_at", dir(obj))
+        self.assertIn("created_at", obj.__dict__)
+
     def test_email_is_public_str(self):
         self.assertEqual(str, type(User.email))
 

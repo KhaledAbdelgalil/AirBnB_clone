@@ -23,6 +23,9 @@ class TestAmenity(unittest.TestCase):
     def test_type_updated_at(self):
         self.assertEqual(type(Amenity().updated_at), datetime)
     
+    def test_type_name(self):
+         self.assertEqual(type(Amenity().name), str)
+    
     def test_id_unique(self):
         obj1 = Amenity()
         obj2 = Amenity()
@@ -40,7 +43,7 @@ class TestAmenity(unittest.TestCase):
         obj2 = Amenity()
         self.assertLess(obj1.updated_at, obj2.updated_at)
     
-    def tst_Str(self):
+    def test_Str(self):
         dt = datetime.today()
         dt_repr = repr(dt)
         obj1 = Amenity()
@@ -52,7 +55,7 @@ class TestAmenity(unittest.TestCase):
         self.assertIn("'id': '123456'", obj1Str)
         self.assertIn("'created_at': " + dt_repr, obj1Str)
         self.assertIn("'updated_at': " + dt_repr, obj1Str)
-        self.assertIn("name: temp", obj1Str)
+        self.assertIn("'name': 'temp'", obj1Str)
     
     def test_args_unused(self):
         obj = Amenity(None)
@@ -74,6 +77,10 @@ class TestAmenity(unittest.TestCase):
         self.assertEqual(obj.created_at, dt)
         self.assertEqual(obj.updated_at, dt)
     
+    def test_construction_with_None_kwargs(self):
+        with self.assertRaises(TypeError):
+            Amenity(id=None, created_at=None, updated_at=None)
+    
     def test_type_to_dict(self):
         obj = Amenity()
         self.assertTrue(dict, type(obj.to_dict()))
@@ -87,9 +94,9 @@ class TestAmenity(unittest.TestCase):
 
     def test_to_dict_contains_added_attributes(self):
         obj = Amenity()
-        obj.name = "Holberton"
+        obj.hello = "Holberton"
         obj.my_number = 98
-        self.assertIn("name", obj.to_dict())
+        self.assertIn("hello", obj.to_dict())
         self.assertIn("my_number", obj.to_dict())
 
     def test_type_to_dict_created_updated_attributes(self):
@@ -116,9 +123,9 @@ class TestAmenity(unittest.TestCase):
         self.assertNotEqual(obj.to_dict(), obj.__dict__)
 
     def test_to_dict_with_arg(self):
-        bm = Amenity()
+        obj = Amenity()
         with self.assertRaises(TypeError):
-            bm.to_dict(None)
+            obj.to_dict(None)
 
 class TestAmenitySave(unittest.TestCase):
     """Unittests for testing save method of the Amenity class."""
