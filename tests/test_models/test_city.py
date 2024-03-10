@@ -2,180 +2,193 @@
 """Defines unittests for models/city.py.
 
 Unittest classes:
-    TestCity
-    TestCitySave
+    TestCity_instantiation
+    TestCity_save
+    TestCity_to_dict
 """
-from models.city import City
+import os
 import models
 import unittest
 from datetime import datetime
 from time import sleep
-import os
+from models.city import City
 
 
-class TestCity(unittest.TestCase):
+class TestCity_instantiation(unittest.TestCase):
     """Unittests for testing instantiation of the City class."""
 
-    def test_type(self):
-        self.assertEqual(type(City()), City)
+    def test_no_args_instantiates(self):
+        self.assertEqual(City, type(City()))
 
-    def test_Storage(self):
+    def test_new_instance_stored_in_objects(self):
         self.assertIn(City(), models.storage.all().values())
 
-    def test_type_id(self):
-        self.assertEqual(type(City().id), str)
+    def test_id_is_public_str(self):
+        self.assertEqual(str, type(City().id))
 
-    def test_type_created_at(self):
-        self.assertEqual(type(City().created_at), datetime)
+    def test_created_at_is_public_datetime(self):
+        self.assertEqual(datetime, type(City().created_at))
 
-    def test_type_updated_at(self):
-        self.assertEqual(type(City().updated_at), datetime)
+    def test_updated_at_is_public_datetime(self):
+        self.assertEqual(datetime, type(City().updated_at))
 
-    def test_type_state(self):
-        self.assertEqual(type(City().state_id), str)
+    def test_state_id_is_public_class_attribute(self):
+        cy = City()
+        self.assertEqual(str, type(City.state_id))
+        self.assertIn("state_id", dir(cy))
+        self.assertNotIn("state_id", cy.__dict__)
 
-    def test_type_name(self):
-        self.assertEqual(type(City().name), str)
+    def test_name_is_public_class_attribute(self):
+        cy = City()
+        self.assertEqual(str, type(City.name))
+        self.assertIn("name", dir(cy))
+        self.assertNotIn("name", cy.__dict__)
 
-    def test_id_unique(self):
-        obj1 = City()
-        obj2 = City()
-        self.assertNotEqual(obj1.id, obj2.id)
+    def test_two_cities_unique_ids(self):
+        cy1 = City()
+        cy2 = City()
+        self.assertNotEqual(cy1.id, cy2.id)
 
-    def test_different_created_at(self):
-        obj1 = City()
-        sleep(0.1)
-        obj2 = City()
-        self.assertLess(obj1.created_at, obj2.created_at)
+    def test_two_cities_different_created_at(self):
+        cy1 = City()
+        sleep(0.05)
+        cy2 = City()
+        self.assertLess(cy1.created_at, cy2.created_at)
 
-    def test_different_updated_at(self):
-        obj1 = City()
-        sleep(0.1)
-        obj2 = City()
-        self.assertLess(obj1.updated_at, obj2.updated_at)
+    def test_two_cities_different_updated_at(self):
+        cy1 = City()
+        sleep(0.05)
+        cy2 = City()
+        self.assertLess(cy1.updated_at, cy2.updated_at)
 
-    def test_Str(self):
+    def test_str_representation(self):
         dt = datetime.today()
         dt_repr = repr(dt)
-        obj1 = City()
-        obj1.id = "123456"
-        obj1.created_at = obj1.updated_at = dt
-        obj1.name = "temp"
-        obj1.state_id = 2
-        obj1Str = obj1.__str__()
-        self.assertIn("[City] (123456)", obj1Str)
-        self.assertIn("'id': '123456'", obj1Str)
-        self.assertIn("'created_at': " + dt_repr, obj1Str)
-        self.assertIn("'updated_at': " + dt_repr, obj1Str)
-        self.assertIn("'name': 'temp'", obj1Str)
-        self.assertIn("'state_id': 2", obj1Str)
+        cy = City()
+        cy.id = "123456"
+        cy.created_at = cy.updated_at = dt
+        cystr = cy.__str__()
+        self.assertIn("[City] (123456)", cystr)
+        self.assertIn("'id': '123456'", cystr)
+        self.assertIn("'created_at': " + dt_repr, cystr)
+        self.assertIn("'updated_at': " + dt_repr, cystr)
 
     def test_args_unused(self):
-        obj = City(None)
-        self.assertNotIn(None, obj.__dict__.values())
+        cy = City(None)
+        self.assertNotIn(None, cy.__dict__.values())
 
-    def test_construction_with_kwargs(self):
+    def test_instantiation_with_kwargs(self):
         dt = datetime.today()
         dt_iso = dt.isoformat()
-        obj = City(id="345", created_at=dt_iso, updated_at=dt_iso)
-        self.assertEqual(obj.id, "345")
-        self.assertEqual(obj.created_at, dt)
-        self.assertEqual(obj.updated_at, dt)
+        cy = City(id="345", created_at=dt_iso, updated_at=dt_iso)
+        self.assertEqual(cy.id, "345")
+        self.assertEqual(cy.created_at, dt)
+        self.assertEqual(cy.updated_at, dt)
 
-    def test_construction_with_args_and_kwargs(self):
-        dt = datetime.today()
-        dt_iso = dt.isoformat()
-        obj = City("12", id="345", created_at=dt_iso, updated_at=dt_iso)
-        self.assertEqual(obj.id, "345")
-        self.assertEqual(obj.created_at, dt)
-        self.assertEqual(obj.updated_at, dt)
-
-    def test_type_to_dict(self):
-        obj = City()
-        self.assertTrue(dict, type(obj.to_dict()))
-
-    def test_to_dict_contains_correct_keys(self):
-        obj = City()
-        self.assertIn("id", obj.to_dict())
-        self.assertIn("created_at", obj.to_dict())
-        self.assertIn("updated_at", obj.to_dict())
-        self.assertIn("__class__", obj.to_dict())
-
-    def test_to_dict_contains_added_attributes(self):
-        obj = City()
-        obj.name = "Holberton"
-        obj.my_number = 98
-        self.assertIn("name", obj.to_dict())
-        self.assertIn("my_number", obj.to_dict())
-
-    def test_type_to_dict_created_updated_attributes(self):
-        obj = City()
-        obj_dict = obj.to_dict()
-        self.assertEqual(str, type(obj_dict["created_at"]))
-        self.assertEqual(str, type(obj_dict["updated_at"]))
-
-    def test_to_dict_output(self):
-        dt = datetime.today()
-        obj = City()
-        obj.id = "123456"
-        obj.created_at = obj.updated_at = dt
-        tdict = {
-            "id": "123456",
-            "__class__": "City",
-            "created_at": dt.isoformat(),
-            "updated_at": dt.isoformat(),
-        }
-        self.assertDictEqual(obj.to_dict(), tdict)
-
-    def test_to_dict_dunder_dict(self):
-        obj = City()
-        self.assertNotEqual(obj.to_dict(), obj.__dict__)
-
-    def test_to_dict_with_arg(self):
-        bm = City()
+    def test_instantiation_with_None_kwargs(self):
         with self.assertRaises(TypeError):
-            bm.to_dict(None)
+            City(id=None, created_at=None, updated_at=None)
 
 
-class TestCitySave(unittest.TestCase):
+class TestCity_save(unittest.TestCase):
     """Unittests for testing save method of the City class."""
 
     @classmethod
     def setUp(self):
         try:
-            os.rename("file.json", "testTmp")
+            os.rename("file.json", "tmp")
         except IOError:
             pass
 
-    @classmethod
     def tearDown(self):
         try:
             os.remove("file.json")
         except IOError:
             pass
         try:
-            os.rename("testTmp", "file.json")
+            os.rename("tmp", "file.json")
         except IOError:
             pass
 
     def test_one_save(self):
-        obj = City()
-        sleep(0.1)
-        initial_updated_at = obj.updated_at
-        obj.save()
-        self.assertLess(initial_updated_at, obj.updated_at)
+        cy = City()
+        sleep(0.05)
+        first_updated_at = cy.updated_at
+        cy.save()
+        self.assertLess(first_updated_at, cy.updated_at)
+
+    def test_two_saves(self):
+        cy = City()
+        sleep(0.05)
+        first_updated_at = cy.updated_at
+        cy.save()
+        second_updated_at = cy.updated_at
+        self.assertLess(first_updated_at, second_updated_at)
+        sleep(0.05)
+        cy.save()
+        self.assertLess(second_updated_at, cy.updated_at)
 
     def test_save_with_arg(self):
-        obj = City()
+        cy = City()
         with self.assertRaises(TypeError):
-            obj.save(None)
+            cy.save(None)
 
     def test_save_updates_file(self):
-        obj = City()
-        obj.save()
-        objId = "City." + obj.id
+        cy = City()
+        cy.save()
+        cyid = "City." + cy.id
         with open("file.json", "r") as f:
-            self.assertIn(objId, f.read())
+            self.assertIn(cyid, f.read())
+
+
+class TestCity_to_dict(unittest.TestCase):
+    """Unittests for testing to_dict method of the City class."""
+
+    def test_to_dict_type(self):
+        self.assertTrue(dict, type(City().to_dict()))
+
+    def test_to_dict_contains_correct_keys(self):
+        cy = City()
+        self.assertIn("id", cy.to_dict())
+        self.assertIn("created_at", cy.to_dict())
+        self.assertIn("updated_at", cy.to_dict())
+        self.assertIn("__class__", cy.to_dict())
+
+    def test_to_dict_contains_added_attributes(self):
+        cy = City()
+        cy.middle_name = "Holberton"
+        cy.my_number = 98
+        self.assertEqual("Holberton", cy.middle_name)
+        self.assertIn("my_number", cy.to_dict())
+
+    def test_to_dict_datetime_attributes_are_strs(self):
+        cy = City()
+        cy_dict = cy.to_dict()
+        self.assertEqual(str, type(cy_dict["id"]))
+        self.assertEqual(str, type(cy_dict["created_at"]))
+        self.assertEqual(str, type(cy_dict["updated_at"]))
+
+    def test_to_dict_output(self):
+        dt = datetime.today()
+        cy = City()
+        cy.id = "123456"
+        cy.created_at = cy.updated_at = dt
+        tdict = {
+            'id': '123456',
+            '__class__': 'City',
+            'created_at': dt.isoformat(),
+            'updated_at': dt.isoformat(),
+        }
+        self.assertDictEqual(cy.to_dict(), tdict)
+
+    def test_contrast_to_dict_dunder_dict(self):
+        cy = City()
+        self.assertNotEqual(cy.to_dict(), cy.__dict__)
+
+    def test_to_dict_with_arg(self):
+        cy = City()
+        with self.assertRaises(TypeError):
+            cy.to_dict(None)
 
 
 if __name__ == "__main__":

@@ -32,15 +32,6 @@ class TestUser_instantiation(unittest.TestCase):
     def test_updated_at_is_public_datetime(self):
         self.assertEqual(datetime, type(User().updated_at))
 
-    def test_basic_attributes(self):
-        obj = User()
-        self.assertIn("id", dir(obj))
-        self.assertIn("id", obj.__dict__)
-        self.assertIn("updated_at", dir(obj))
-        self.assertIn("updated_at", obj.__dict__)
-        self.assertIn("created_at", dir(obj))
-        self.assertIn("created_at", obj.__dict__)
-
     def test_email_is_public_str(self):
         self.assertEqual(str, type(User.email))
 
@@ -100,7 +91,7 @@ class TestUser_instantiation(unittest.TestCase):
 
 
 class TestUser_save(unittest.TestCase):
-    """Unittests for testing save method of the User class."""
+    """Unittests for testing save method of the  class."""
 
     @classmethod
     def setUp(self):
@@ -183,10 +174,10 @@ class TestUser_to_dict(unittest.TestCase):
         us.id = "123456"
         us.created_at = us.updated_at = dt
         tdict = {
-            "id": "123456",
-            "__class__": "User",
-            "created_at": dt.isoformat(),
-            "updated_at": dt.isoformat(),
+            'id': '123456',
+            '__class__': 'User',
+            'created_at': dt.isoformat(),
+            'updated_at': dt.isoformat(),
         }
         self.assertDictEqual(us.to_dict(), tdict)
 

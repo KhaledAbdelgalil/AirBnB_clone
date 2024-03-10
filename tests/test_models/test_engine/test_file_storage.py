@@ -2,11 +2,12 @@
 """Defines unittests for models/engine/file_storage.py.
 
 Unittest classes:
-    TestFileStorageConstruction
-    TestFileStorageMethods
+    TestFileStorage_instantiation
+    TestFileStorage_methods
 """
 import os
 import json
+import models
 import unittest
 from datetime import datetime
 from models.base_model import BaseModel
@@ -17,16 +18,15 @@ from models.place import Place
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
-import models
 
 
-class TestFileStorageConstruction(unittest.TestCase):
-    """Unittests for testing construction of the FileStorage class."""
+class TestFileStorage_instantiation(unittest.TestCase):
+    """Unittests for testing instantiation of the FileStorage class."""
 
-    def test_file_storage_instantiation_no_args(self):
+    def test_FileStorage_instantiation_no_args(self):
         self.assertEqual(type(FileStorage()), FileStorage)
 
-    def test_file_storage_instantiation_with_arg(self):
+    def test_FileStorage_instantiation_with_arg(self):
         with self.assertRaises(TypeError):
             FileStorage(None)
 
@@ -40,18 +40,18 @@ class TestFileStorageConstruction(unittest.TestCase):
         self.assertEqual(type(models.storage), FileStorage)
 
 
-class TestFileStorageMethods(unittest.TestCase):
+class TestFileStorage_methods(unittest.TestCase):
     """Unittests for testing methods of the FileStorage class."""
 
     @classmethod
-    def setUpClass(cls):
+    def setUp(self):
         try:
             os.rename("file.json", "tmp")
         except IOError:
             pass
 
     @classmethod
-    def tearDownClass(cls):
+    def tearDown(self):
         try:
             os.remove("file.json")
         except IOError:
@@ -103,7 +103,7 @@ class TestFileStorageMethods(unittest.TestCase):
         with self.assertRaises(TypeError):
             models.storage.new(BaseModel(), 1)
 
-    def test_new_with_none(self):
+    def test_new_with_None(self):
         with self.assertRaises(AttributeError):
             models.storage.new(None)
 
