@@ -5,7 +5,6 @@ Module: file_storage.py
 Defines the FileStorage class for managing
 serialization and deserialization of objects.
 """
-
 import os
 import json
 from models.base_model import BaseModel
