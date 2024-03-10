@@ -101,6 +101,10 @@ EOF  help  quit
 $
 ```
 
+## Examples
+For the other classes like city, place,..etc. We can use the function the same way, all other functions like update, show,..etc. are listed below
+
+![console](https://github.com/mariamabdelgalil/AirBnB_clone/assets/88682947/b5302f30-f27a-4126-a168-cdcd8c663ef9)
 
 
 ## Available commands and their functionality
