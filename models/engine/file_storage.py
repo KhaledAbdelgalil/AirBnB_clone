@@ -66,7 +66,6 @@ class FileStorage:
                 read_dic = json.load(read_file)
         except Exception:
             return
-        """ key(class name.id) ==> object dict """
         for key, object_dic in read_dic.items():
             if object_dic["__class__"] in self.__nameToClass:
                 obj = self.__nameToClass[object_dic["__class__"]](**object_dic)
