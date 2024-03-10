@@ -22,28 +22,18 @@ class FileStorage:
     Attributes:
         __file_path (str): The name of the file to save objects to.
         __objects (dict): A dictionary of instantiated objects.
-        __nameToClass(dict): name of class==>constructor of class.
     """
     __file_path = "file.json"
     __objects = {}
-    __nameToClass = {
-        "BaseModel": BaseModel,
-        "User": User,
-        "State": State,
-        "City": City,
-        "Amenity": Amenity,
-        "Place": Place,
-        "Review": Review,
-    }
 
     def all(self):
         """Returns the dictionary __objects"""
-        return self.__objects
+        return FileStorage.__objects
 
     def new(self, obj):
         """Sets in __objects the obj with key <obj class name>.id"""
         key = "{}.{}".format(obj.__class__.__name__, obj.id)
-        self.__objects[key] = obj
+        self.all()[key] = obj
 
     def save(self):
         """Serialize __objects to the JSON file __file_path."""
@@ -65,7 +55,16 @@ class FileStorage:
                 read_dic = json.load(read_file)
         except Exception:
             return
+        nameToClass = {
+            "BaseModel": BaseModel,
+            "User": User,
+            "State": State,
+            "City": City,
+            "Amenity": Amenity,
+            "Place": Place,
+            "Review": Review,
+        }
         for key, object_dic in read_dic.items():
-            if object_dic["__class__"] in self.__nameToClass:
-                obj = self.__nameToClass[object_dic["__class__"]](**object_dic)
-                self.__objects[key] = obj
+            if object_dic["__class__"] in nameToClass:
+                obj = nameToClass[object_dic["__class__"]](**object_dic)
+                self.all()[key] = obj
