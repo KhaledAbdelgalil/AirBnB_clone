@@ -1,5 +1,10 @@
 #!/usr/bin/python3
+"""Defines unittests for models/amenity.py.
 
+Unittest classes:
+    TestAmenity
+    TestAmenitySave
+"""
 from models.amenity import Amenity
 import models
 import unittest
@@ -9,6 +14,8 @@ import os
 
 
 class TestAmenity(unittest.TestCase):
+    """Unittests for testing instantiation of the Amenity class."""
+
     def test_type(self):
         self.assertEqual(type(Amenity()), Amenity)
 

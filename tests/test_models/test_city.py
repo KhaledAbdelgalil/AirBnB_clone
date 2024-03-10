@@ -1,5 +1,10 @@
 #!/usr/bin/python3
+"""Defines unittests for models/city.py.
 
+Unittest classes:
+    TestCity
+    TestCitySave
+"""
 from models.city import City
 import models
 import unittest
@@ -8,7 +13,9 @@ from time import sleep
 import os
 
 
-class TestAmenity(unittest.TestCase):
+class TestCity(unittest.TestCase):
+    """Unittests for testing instantiation of the City class."""
+
     def test_type(self):
         self.assertEqual(type(City()), City)
 

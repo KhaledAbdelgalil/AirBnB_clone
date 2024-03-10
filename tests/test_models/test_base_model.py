@@ -1,5 +1,10 @@
 #!/usr/bin/python3
+"""Defines unittests for models/base_model.py.
 
+Unittest classes:
+    TestBaseModel
+    TestBaseModelSave
+"""
 from models.base_model import BaseModel
 import models
 import unittest
@@ -9,6 +14,8 @@ import os
 
 
 class TestBaseModel(unittest.TestCase):
+    """Unittests for testing instantiation of the BaseModel class."""
+
     def test_type(self):
         self.assertEqual(type(BaseModel()), BaseModel)
 

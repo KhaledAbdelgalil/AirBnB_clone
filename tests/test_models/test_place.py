@@ -1,5 +1,10 @@
 #!/usr/bin/python3
+"""Defines unittests for models/place.py.
 
+Unittest classes:
+    TestPlace
+    TestPlaceSave
+"""
 from models.place import Place
 import models
 import unittest
@@ -9,6 +14,8 @@ import os
 
 
 class TestPlace(unittest.TestCase):
+    """Unittests for testing instantiation of the Place class."""
+
     def test_type(self):
         self.assertEqual(type(Place()), Place)
 
@@ -219,7 +226,7 @@ class TestPlace(unittest.TestCase):
             bm.to_dict(None)
 
 
-class TestAmenitySave(unittest.TestCase):
+class TestPlaceSave(unittest.TestCase):
     """Unittests for testing save method of the place class."""
 
     @classmethod

@@ -1,5 +1,10 @@
 #!/usr/bin/python3
+"""Defines unittests for models/state.py.
 
+Unittest classes:
+    TestState
+    TestStateSave
+"""
 from models.state import State
 import models
 import unittest
@@ -8,7 +13,9 @@ from time import sleep
 import os
 
 
-class TestStatee(unittest.TestCase):
+class TestState(unittest.TestCase):
+    """Unittests for testing instantiation of the State class."""
+
     def test_type(self):
         self.assertEqual(type(State()), State)
 
@@ -137,7 +144,7 @@ class TestStatee(unittest.TestCase):
             bm.to_dict(None)
 
 
-class TestAmenitySave(unittest.TestCase):
+class TestStateSave(unittest.TestCase):
     """Unittests for testing save method of the State class."""
 
     @classmethod

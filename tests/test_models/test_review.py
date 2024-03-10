@@ -1,5 +1,10 @@
 #!/usr/bin/python3
+"""Defines unittests for models/review.py.
 
+Unittest classes:
+    TestReview
+    TestReviewSave
+"""
 from models.review import Review
 import models
 import unittest
@@ -9,6 +14,8 @@ import os
 
 
 class TestReview(unittest.TestCase):
+    """Unittests for testing instantiation of the Review class."""
+
     def test_type(self):
         self.assertEqual(type(Review()), Review)
 
@@ -153,7 +160,7 @@ class TestReview(unittest.TestCase):
             bm.to_dict(None)
 
 
-class TestAmenitySave(unittest.TestCase):
+class TestReviewSave(unittest.TestCase):
     """Unittests for testing save method of the Review class."""
 
     @classmethod
